@@ -12,25 +12,13 @@ var serviceProvider = new ServiceCollection()
     .AddScoped<IEnumValidator, EnumValidator>()
     .BuildServiceProvider();
 
+// Ensure crea
+var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+context.Database.EnsureCreated();
+
 var validator = serviceProvider.GetRequiredService<IEnumValidator>();
 validator.EnsureTypeSafeEnumValidation();
-// var enums = RoleEnum.GetValues();
-// var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
-// var dbSetTypes = context.GetDbSetTypes();
-// var debug = dbSetTypes;
-
-// var properties = typeof(ApplicationDbContext)
-//     .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-//     .Where(property => property.PropertyType.IsGenericType && typeof(DbSet<>).IsAssignableFrom(property.PropertyType.GetGenericTypeDefinition()))
-//     .Select(property => property.PropertyType.GetGenericTypeDefinition());
-
-// var a = Assembly.GetAssembly(typeof(TypeSafeEnum<>)).GetTypes().Where(type => type.IsTypeSafeEnum());
-//https://stackoverflow.com/questions/5411694/get-all-inherited-classes-of-an-abstract-class
-//var enums = new string[] { "RoleEnum" }; // TODO: Dynamically fetch enum
-
-
-// foreach (var role in RoleEnum.GetRoles())
-//     Console.WriteLine(role.Name);
+Console.WriteLine("Valid!");
 
 // var value = Role.Administrator;
 // switch (value)

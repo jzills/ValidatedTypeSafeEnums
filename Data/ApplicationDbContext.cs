@@ -10,4 +10,16 @@ public class ApplicationDbContext : DbContext
         : base(options) {}
 
     public virtual DbSet<Role> Roles { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder
+            .Entity<Role>()
+            .HasData(new Role[]
+            {
+                new Role { Id = 1, Name = "User" },
+                new Role { Id = 2, Name = "Manager" },
+                new Role { Id = 3, Name = "Administrator" } 
+            });
+    }
 }
