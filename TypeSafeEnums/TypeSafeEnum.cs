@@ -6,11 +6,11 @@ namespace ValidatedTypeSafeEnums.TypeSafeEnums;
 
 public abstract class TypeSafeEnum<T> : TypeSafeEnumBase
 {
-    public TypeSafeEnum(int id, string name)
-        : base(id, name) {}
+    public TypeSafeEnum(int enumId, string enumName) : base(enumId, enumName) 
+    {
+    }
 
-    public static List<T> GetValues() =>
+    public static IEnumerable<T> GetValues() =>
         typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Select(field => (T)field.GetValue(null))
-            .ToList();
+            .Select(field => (T)field.GetValue(null));
 }

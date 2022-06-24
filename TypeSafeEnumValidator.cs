@@ -7,16 +7,11 @@ using ValidatedTypeSafeEnums.TypeSafeEnums;
 
 namespace ValidatedTypeSafeEnums;
 
-public interface IEnumValidator
+public class TypeSafeEnumValidator<T> : ITypeSafeEnumValidator<T> where T : DbContext
 {
-    public void EnsureTypeSafeEnumValidation();
-}
+    private readonly T _context; 
 
-public class EnumValidator : IEnumValidator
-{
-    private readonly ApplicationDbContext _context; 
-
-    public EnumValidator(ApplicationDbContext context) => _context = context;
+    public TypeSafeEnumValidator(T context) => _context = context;
 
     public void EnsureTypeSafeEnumValidation()
     {
@@ -27,14 +22,14 @@ public class EnumValidator : IEnumValidator
             var enumTypes = assembly.GetTypes().Where(type => type.IsTypeSafeEnum());
             foreach (var enumType in enumTypes)
             {
-                var enumName = enumType.Name.Substring(0, enumType.Name.IndexOf("Enum"));
-                var dbSetType = dbSetTypes.First(type => type.Name == enumName);
+                var matchingDbSetName = enumType.Name.Substring(0, enumType.Name.IndexOf("Enum"));
+                var dbSetType = dbSetTypes.First(type => type.Name == matchingDbSetName);
                 var dbSet = _context.Set(dbSetType) as IQueryable<ITypeSafeEnum>;
                 if (dbSet != null)
                 {
                     foreach (var element in dbSet)
                     {
-                        var enumField = enumType.GetField(element.Name, BindingFlags.Public | BindingFlags.Static);
+                        var enumField = enumType.GetField(element.CleanName(), BindingFlags.Public | BindingFlags.Static);
                         if (enumField != null)
                         {
                             var enumValue = enumField.GetValue(null) as TypeSafeEnumBase;
@@ -43,43 +38,43 @@ public class EnumValidator : IEnumValidator
                                 var matchingEnum = dbSet.FirstOrDefault(element => element.Id == enumValue.Id);
                                 if (matchingEnum == null)
                                 {
-                                    throw new Exception(
-                                        $"The enum {enumType.Name} has an incorrect value" + 
-                                        $" for the field Id");
+#pragma warning disable CS8625
+                                    throw new InconsistentEnumException(
+                                        enumType.Name, 
+                                        nameof(matchingEnum.Id),
+                                        null,
+                                        enumValue.Id.ToString()
+                                    );
+#pragma warning restore CS8625
                                 }
                             }
                             else
                             {
-                                throw new MissingBaseClassException(
-                                    $"The enum {enumType.Name} is missing a" + 
-                                    $" base class of {nameof(TypeSafeEnumBase)}"
-                                );
+                                throw new MissingBaseClassException(enumType.Name);
                             }
                         }
                         else
                         {
-                            throw new MissingFieldException(
-                                $"The enum {enumType.Name} is missing a" + 
-                                $" field for the database record {element.Name}"
+#pragma warning disable CS8625
+                            throw new InconsistentEnumException(
+                                enumType.Name, 
+                                nameof(element.Name), 
+                                null, 
+                                element.Name
                             );
+#pragma warning restore CS8625
                         }
                     }
                 }
                 else
                 {
-                    throw new MissingInterfaceException(
-                        $"DbSet for {dbSetType.Name} couldn't" +
-                        $" be found or is not inheriting from {nameof(ITypeSafeEnum)}"
-                    );
+                    throw new MissingInterfaceException(dbSetType.Name);
                 }
             }
         }
         else
         {
-            throw new AssemblyNotFoundException(
-                $"Assembly not found for {typeof(TypeSafeEnum<>).Name} " +
-                $"in calling method {nameof(EnsureTypeSafeEnumValidation)}"
-            );
+            throw new AssemblyNotFoundException(typeof(TypeSafeEnum<>).Name, nameof(EnsureTypeSafeEnumValidation));
         }
     }
 }

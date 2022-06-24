@@ -1,24 +1,18 @@
-﻿using System.Reflection;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ValidatedTypeSafeEnums;
 using ValidatedTypeSafeEnums.Data;
-using ValidatedTypeSafeEnums.Extensions;
-using ValidatedTypeSafeEnums.TypeSafeEnums;
 
 var serviceProvider = new ServiceCollection()
     .AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase(nameof(ApplicationDbContext)))
-    .AddScoped<IEnumValidator, EnumValidator>()
+    .AddScoped(typeof(ITypeSafeEnumValidator<>), typeof(TypeSafeEnumValidator<>))
     .BuildServiceProvider();
 
-// Ensure crea
 var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 context.Database.EnsureCreated();
 
-var validator = serviceProvider.GetRequiredService<IEnumValidator>();
+var validator = serviceProvider.GetRequiredService<ITypeSafeEnumValidator<ApplicationDbContext>>();
 validator.EnsureTypeSafeEnumValidation();
-Console.WriteLine("Valid!");
 
 // var value = Role.Administrator;
 // switch (value)
