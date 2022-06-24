@@ -5,7 +5,7 @@ using ValidatedTypeSafeEnums.Exceptions;
 using ValidatedTypeSafeEnums.Extensions;
 using ValidatedTypeSafeEnums.TypeSafeEnums;
 
-namespace ValidatedTypeSafeEnums;
+namespace ValidatedTypeSafeEnums.Validation;
 
 public class TypeSafeEnumValidator<T> : ITypeSafeEnumValidator<T> where T : DbContext
 {

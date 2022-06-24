@@ -1,4 +1,6 @@
-namespace ValidatedTypeSafeEnums.TypeSafeEnums;
+using ValidatedTypeSafeEnums.TypeSafeEnums;
+
+namespace ValidatedTypeSafeEnums.Data;
 
 public sealed class OrderPaymentCycleEnum : TypeSafeEnum<OrderPaymentCycleEnum>, ITypeSafeEnum
 {
