@@ -1,6 +1,5 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using ValidatedTypeSafeEnums.Data;
 using ValidatedTypeSafeEnums.Exceptions;
 using ValidatedTypeSafeEnums.Extensions;
 using ValidatedTypeSafeEnums.TypeSafeEnums;
@@ -22,7 +21,7 @@ public class TypeSafeEnumValidator<T> : ITypeSafeEnumValidator<T> where T : DbCo
             var enumTypes = assembly.GetTypes().Where(type => type.IsTypeSafeEnum());
             foreach (var enumType in enumTypes)
             {
-                var matchingDbSetName = enumType.Name.Substring(0, enumType.Name.IndexOf("Enum"));
+                var matchingDbSetName = enumType.GetTypeSafeEnumPrefix();
                 var dbSetType = dbSetTypes.First(type => type.Name == matchingDbSetName);
                 var dbSet = _context.Set(dbSetType) as IQueryable<ITypeSafeEnum>;
                 if (dbSet != null)
