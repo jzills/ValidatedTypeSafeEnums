@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ValidatedTypeSafeEnums.Data;
+using ValidatedTypeSafeEnums.Enums;
 using ValidatedTypeSafeEnums.Validation;
 
 var serviceProvider = new ServiceCollection()
