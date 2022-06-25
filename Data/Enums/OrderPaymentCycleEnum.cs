@@ -2,7 +2,7 @@ using ValidatedTypeSafeEnums.TypeSafeEnums;
 
 namespace ValidatedTypeSafeEnums.Data;
 
-public sealed class OrderPaymentCycleEnum : TypeSafeEnum<OrderPaymentCycleEnum>, ITypeSafeEnum
+public sealed class OrderPaymentCycleEnum : TypeSafeEnum<OrderPaymentCycleEnum>
 {
     public static OrderPaymentCycleEnum Month1 = new OrderPaymentCycleEnum(1, "1 Month");
     public static OrderPaymentCycleEnum Months3 = new OrderPaymentCycleEnum(2, "3 Months");

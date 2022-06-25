@@ -2,7 +2,7 @@ using ValidatedTypeSafeEnums.TypeSafeEnums;
 
 namespace ValidatedTypeSafeEnums.Enums;
 
-public sealed class OrderStatusEnum : TypeSafeEnum<OrderStatusEnum>, ITypeSafeEnum
+public sealed class OrderStatusEnum : TypeSafeEnum<OrderStatusEnum>
 {
     public static OrderStatusEnum Pending = new OrderStatusEnum(1, nameof(Pending));
     public static OrderStatusEnum Purchased = new OrderStatusEnum(2, nameof(Purchased));

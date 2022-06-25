@@ -9,71 +9,95 @@ namespace ValidatedTypeSafeEnums.Validation;
 public class TypeSafeEnumValidator<T> : ITypeSafeEnumValidator<T> where T : DbContext
 {
     private readonly T _context; 
+    private readonly string _propertyMap = "Name";
 
     public TypeSafeEnumValidator(T context) => _context = context;
 
     public void EnsureTypeSafeEnumValidation()
-    {
+    { 
         var assembly = Assembly.GetAssembly(typeof(TypeSafeEnum<>));
         if (assembly != null)
         {
-            var dbSetTypes = _context.GetDbSetTypes();
+            var enumBaseFields = GetEnumBaseFieldInfo();
             var enumTypes = assembly.GetTypes().Where(type => type.IsTypeSafeEnum());
+            var dbSetTypes = _context.GetDbSetTypes();
             foreach (var enumType in enumTypes)
             {
-                var matchingDbSetName = enumType.GetTypeSafeEnumPrefix();
-                var dbSetType = dbSetTypes.First(type => type.Name == matchingDbSetName);
-                var dbSet = _context.Set(dbSetType) as IQueryable<ITypeSafeEnum>;
-                if (dbSet != null)
+                var enumPrefix = enumType.GetTypeSafeEnumPrefix();
+                var dbSetType = dbSetTypes.First(type => type.Name == enumPrefix);
+                var dbSet = _context.Set(dbSetType);
+                foreach (var element in dbSet)
                 {
-                    foreach (var element in dbSet)
+                    var enumFieldInfo = GetEnumMappingFieldInfo(enumType, dbSetType, element);
+                    if (enumFieldInfo != null)
                     {
-                        var enumField = enumType.GetField(element.CleanName(), BindingFlags.Public | BindingFlags.Static);
-                        if (enumField != null)
+                        var enumValue = enumFieldInfo.GetValue(null) as TypeSafeEnumBase;
+                        if (enumValue != null)
                         {
-                            var enumValue = enumField.GetValue(null) as TypeSafeEnumBase;
-                            if (enumValue != null)
-                            {
-                                var matchingEnum = dbSet.FirstOrDefault(element => element.Id == enumValue.Id);
-                                if (matchingEnum == null)
+                            foreach (var enumField in enumBaseFields)
+                            {                               
+                                var elementPropertyInfo = dbSetType.GetProperty(enumField.Name);
+                                if (elementPropertyInfo != null)
                                 {
-#pragma warning disable CS8625
-                                    throw new InconsistentEnumException(
-                                        enumType.Name, 
-                                        nameof(matchingEnum.Id),
-                                        null,
-                                        enumValue.Id.ToString()
-                                    );
-#pragma warning restore CS8625
+                                    dynamic enumFieldValue = enumField.GetValue(enumValue);
+                                    dynamic elementPropertyValue = elementPropertyInfo.GetValue(element);
+                                    if (enumFieldValue != elementPropertyValue)
+                                    {
+                                        throw new InconsistentEnumException(
+                                            enumType.Name, 
+                                            enumField.Name,
+                                            Convert.ToString(enumFieldValue),
+                                            Convert.ToString(elementPropertyValue)
+                                        );
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                throw new MissingBaseClassException(enumType.Name);
+                                else
+                                {
+                                    throw new Exception($"The enum field \"{enumField.Name}\" is not present in the entity \"{dbSetType.Name}\".");
+                                }
                             }
                         }
                         else
                         {
-#pragma warning disable CS8625
-                            throw new InconsistentEnumException(
-                                enumType.Name, 
-                                nameof(element.Name), 
-                                null, 
-                                element.Name
-                            );
-#pragma warning restore CS8625
+                            throw new MissingBaseClassException(enumType.Name);
                         }
                     }
-                }
-                else
-                {
-                    throw new MissingInterfaceException(dbSetType.Name);
+                    else
+                    {
+                        throw new EnumNotFoundException(enumType.Name, _propertyMap);
+                    }
                 }
             }
         }
         else
         {
-            throw new AssemblyNotFoundException(typeof(TypeSafeEnum<>).Name, nameof(EnsureTypeSafeEnumValidation));
+            throw new AssemblyNotFoundException(
+                typeof(TypeSafeEnum<>).Name, 
+                nameof(EnsureTypeSafeEnumValidation)
+            );
         }
     }
+
+    private FieldInfo? GetEnumMappingFieldInfo(Type enumType, Type dbSetType, object? element)
+    {
+        var mapProperty = dbSetType.GetProperty(_propertyMap);
+        if (mapProperty != null)
+        {
+            var elementMap = (string?)mapProperty.GetValue(element);
+            if (!string.IsNullOrEmpty(elementMap))
+            {
+                return enumType.GetField(
+                    elementMap.Clean(), 
+                    BindingFlags.Public | BindingFlags.Static
+                );
+            }           
+        }
+
+        return null;
+    }
+
+    private IEnumerable<FieldInfo> GetEnumBaseFieldInfo() =>
+        typeof(TypeSafeEnumBase)
+            .GetFields(BindingFlags.Public | BindingFlags.Instance)
+            .Where(fieldInfo => fieldInfo.Name != _propertyMap);
 }

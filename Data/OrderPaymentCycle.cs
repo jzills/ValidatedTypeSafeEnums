@@ -4,7 +4,7 @@ namespace ValidatedTypeSafeEnums.Data;
 
 #pragma warning disable CS8618
 
-public class OrderPaymentCycle : ITypeSafeEnum
+public class OrderPaymentCycle
 {
     public int Id { get; set; }
     public string Name { get; set; }

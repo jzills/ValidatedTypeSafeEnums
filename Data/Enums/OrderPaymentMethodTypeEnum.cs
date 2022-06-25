@@ -2,7 +2,7 @@ using ValidatedTypeSafeEnums.TypeSafeEnums;
 
 namespace ValidatedTypeSafeEnums.Enums;
 
-public sealed class OrderPaymentMethodTypeEnum : TypeSafeEnum<OrderPaymentMethodTypeEnum>, ITypeSafeEnum
+public sealed class OrderPaymentMethodTypeEnum : TypeSafeEnum<OrderPaymentMethodTypeEnum>
 {
     public static OrderPaymentMethodTypeEnum Credit = new OrderPaymentMethodTypeEnum(1, nameof(Credit));
     public static OrderPaymentMethodTypeEnum Debit = new OrderPaymentMethodTypeEnum(2, nameof(Debit));

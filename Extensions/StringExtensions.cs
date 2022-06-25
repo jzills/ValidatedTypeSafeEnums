@@ -1,16 +1,15 @@
 using System.Text.RegularExpressions;
-using ValidatedTypeSafeEnums.TypeSafeEnums;
 
 namespace ValidatedTypeSafeEnums.Extensions;
 
-public static class TypeSafeEnumExtensions
+public static class StringEnumExtensions
 {
     private static readonly Regex _regexNumber = new Regex("[0-9]");
     private static readonly Regex _regexIdentifier = new Regex("[^a-zA-Z0-9_]");
 
-    public static string CleanName(this ITypeSafeEnum source)
+    public static string Clean(this string source)
     {
-        var replace = _regexIdentifier.Replace(source.Name, string.Empty);
+        var replace = _regexIdentifier.Replace(source, string.Empty);
         if (replace.Length > 0 && char.IsDigit(replace[0]))
         {
             var match = _regexNumber.Match(replace);

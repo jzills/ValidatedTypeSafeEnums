@@ -4,7 +4,7 @@ namespace ValidatedTypeSafeEnums.Data;
 
 #pragma warning disable CS8618
 
-public class OrderType : ITypeSafeEnum
+public class OrderType
 {
     public int Id { get; set; }
     public string Name { get; set; }
