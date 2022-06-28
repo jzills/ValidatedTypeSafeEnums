@@ -3,6 +3,8 @@ namespace ValidatedTypeSafeEnums.TypeSafeEnums;
 public abstract class TypeSafeEnumBase
 {
     public readonly int Id;
+
+    [EnumToEntityMapping]
     public readonly string Name;
 
     public TypeSafeEnumBase(int enumId, string enumName) => (Id, Name) = (enumId, enumName);

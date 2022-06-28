@@ -9,7 +9,7 @@ namespace ValidatedTypeSafeEnums.Validation;
 public class TypeSafeEnumValidator<T> : ITypeSafeEnumValidator<T> where T : DbContext
 {
     private readonly T _context; 
-    private readonly string _propertyMap = "Name";
+    private readonly string _propertyMap = GetEnumToEntityMapping();
 
     public TypeSafeEnumValidator(T context) => _context = context;
 
@@ -75,6 +75,23 @@ public class TypeSafeEnumValidator<T> : ITypeSafeEnumValidator<T> where T : DbCo
                 typeof(TypeSafeEnum<>).Name, 
                 nameof(EnsureTypeSafeEnumValidation)
             );
+        }
+    }
+
+    private static string GetEnumToEntityMapping()
+    {
+        var propertyMap = typeof(TypeSafeEnumBase)
+            .GetFields()
+            .Where(field => field.GetCustomAttribute<EnumToEntityMappingAttribute>() != null)
+            .ToList();
+
+        if (propertyMap.Count == 1)
+        {
+            return propertyMap.First().Name;
+        }
+        else
+        {
+            throw new EnumToEntityMappingAttributeException();
         }
     }
 
