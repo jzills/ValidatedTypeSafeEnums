@@ -39,8 +39,8 @@ public class TypeSafeEnumValidator<T> : ITypeSafeEnumValidator<T> where T : DbCo
                                 var elementPropertyInfo = dbSetType.GetProperty(enumField.Name);
                                 if (elementPropertyInfo != null)
                                 {
-                                    dynamic enumFieldValue = enumField.GetValue(enumValue);
-                                    dynamic elementPropertyValue = elementPropertyInfo.GetValue(element);
+                                    dynamic? enumFieldValue = enumField.GetValue(enumValue);
+                                    dynamic? elementPropertyValue = elementPropertyInfo.GetValue(element);
                                     if (enumFieldValue != elementPropertyValue)
                                     {
                                         throw new InconsistentEnumException(
