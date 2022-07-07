@@ -7,5 +7,5 @@ namespace ValidatedTypeSafeEnums.Data;
 public class OrderShippingStatus
 {
     public int Id { get; set; }
-    public string Name { get; set; }
+    public string Label { get; set; }
 }

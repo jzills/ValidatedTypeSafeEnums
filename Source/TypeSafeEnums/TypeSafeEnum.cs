@@ -6,7 +6,7 @@ namespace ValidatedTypeSafeEnums.TypeSafeEnums;
 
 public abstract class TypeSafeEnum<T> : TypeSafeEnumBase
 {
-    public TypeSafeEnum(int enumId, string enumName) : base(enumId, enumName) 
+    public TypeSafeEnum(int enumId, string enumLabel) : base(enumId, enumLabel) 
     {
     }
 
@@ -15,9 +15,9 @@ public abstract class TypeSafeEnum<T> : TypeSafeEnumBase
             (value as TypeSafeEnumBase)?.Id == enumId
         );
 
-    public static T GetValue(string enumName) =>
+    public static T GetValue(string enumLabel) =>
         GetValues().FirstOrDefault(value => 
-            (value as TypeSafeEnumBase)?.Name == enumName
+            (value as TypeSafeEnumBase)?.Label == enumLabel
         );
 
     public static IEnumerable<T> GetValues() =>

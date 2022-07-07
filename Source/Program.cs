@@ -14,3 +14,16 @@ context.Database.EnsureCreated();
 
 var validator = serviceProvider.GetRequiredService<ITypeSafeEnumValidator<ApplicationDbContext>>();
 validator.EnsureTypeSafeEnumValidation();
+
+var orderPaymentCycles = OrderPaymentCycleEnum.GetValues();
+foreach (var orderPaymentCycle in orderPaymentCycles)
+{
+    Console.WriteLine($"Id: {orderPaymentCycle.Id}\nLabel: {orderPaymentCycle.Label}");
+}
+
+int orderTypeId = OrderTypeEnum.InStore;
+string orderTypeLabel = OrderTypeEnum.InStore;
+Console.WriteLine($"Id: {orderTypeId}\nLabel: {orderTypeLabel}");
+
+var (orderStatusId, orderStatusLabel) = OrderStatusEnum.Purchased;
+Console.WriteLine($"Id: {orderStatusId}\nLabel: {orderStatusLabel}");
