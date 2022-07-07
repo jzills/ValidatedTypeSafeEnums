@@ -1,0 +1,1 @@
+# Validated Type Safe Enums
