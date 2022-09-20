@@ -6,12 +6,13 @@ using Source.TypeSafeEnums;
 
 namespace Source.Validation;
 
-public class TypeSafeEnumValidator<T> : ITypeSafeEnumValidator<T> where T : DbContext
+public class TypeSafeEnumValidator<TContext> : ITypeSafeEnumValidator<TContext> 
+    where TContext : DbContext
 {
-    private readonly T _context; 
+    private readonly TContext _context; 
     private readonly string _propertyMap = GetEnumToEntityMapping();
 
-    public TypeSafeEnumValidator(T context) => _context = context;
+    public TypeSafeEnumValidator(TContext context) => _context = context;
 
     public void EnsureTypeSafeEnumValidation()
     { 

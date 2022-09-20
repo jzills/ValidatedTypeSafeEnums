@@ -9,7 +9,7 @@ public abstract class TypeSafeEnumBase
 
     public TypeSafeEnumBase(int enumId, string enumLabel) => (Id, Label) = (enumId, enumLabel);
 
-    public static implicit operator int(TypeSafeEnumBase typeSafeEnum) => typeSafeEnum.Id;
-    public static implicit operator string(TypeSafeEnumBase typeSafeEnum) => typeSafeEnum.Label;
+    public static implicit operator int(TypeSafeEnumBase @enum) => @enum.Id;
+    public static implicit operator string(TypeSafeEnumBase @enum) => @enum.Label;
     public void Deconstruct(out int enumId, out string enumLabel) => (enumId, enumLabel) = (Id, Label);
 }
