@@ -1,4 +1,4 @@
-namespace ValidatedTypeSafeEnums.TypeSafeEnums;
+namespace Source.TypeSafeEnums;
 
 public abstract class TypeSafeEnumBase
 {

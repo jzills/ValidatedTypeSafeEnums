@@ -1,6 +1,6 @@
-using ValidatedTypeSafeEnums.TypeSafeEnums;
+using Source.TypeSafeEnums;
 
-namespace ValidatedTypeSafeEnums.Enums;
+namespace Source.Enums;
 
 public sealed class OrderStatusEnum : TypeSafeEnum<OrderStatusEnum>
 {

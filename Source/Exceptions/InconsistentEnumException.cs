@@ -1,4 +1,4 @@
-namespace ValidatedTypeSafeEnums.Exceptions;
+namespace Source.Exceptions;
 
 public class InconsistentEnumException : Exception
 {

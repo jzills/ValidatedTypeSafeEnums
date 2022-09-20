@@ -1,6 +1,6 @@
-using ValidatedTypeSafeEnums.TypeSafeEnums;
+using Source.TypeSafeEnums;
 
-namespace ValidatedTypeSafeEnums.Exceptions;
+namespace Source.Exceptions;
 
 public class MissingBaseClassException : Exception
 {

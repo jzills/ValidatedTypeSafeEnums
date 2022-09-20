@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace ValidatedTypeSafeEnums.TypeSafeEnums;
+namespace Source.TypeSafeEnums;
 
 #pragma warning disable CS8600, CS8603, CS8618, CS8619
 

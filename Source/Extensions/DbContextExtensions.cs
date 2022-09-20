@@ -1,7 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 
-namespace ValidatedTypeSafeEnums.Extensions;
+namespace Source.Extensions;
 
 public static class DbContextExtensions
 {

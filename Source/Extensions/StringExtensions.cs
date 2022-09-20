@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace ValidatedTypeSafeEnums.Extensions;
+namespace Source.Extensions;
 
 public static class StringEnumExtensions
 {

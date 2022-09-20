@@ -1,10 +1,10 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using ValidatedTypeSafeEnums.Exceptions;
-using ValidatedTypeSafeEnums.Extensions;
-using ValidatedTypeSafeEnums.TypeSafeEnums;
+using Source.Exceptions;
+using Source.Extensions;
+using Source.TypeSafeEnums;
 
-namespace ValidatedTypeSafeEnums.Validation;
+namespace Source.Validation;
 
 public class TypeSafeEnumValidator<T> : ITypeSafeEnumValidator<T> where T : DbContext
 {

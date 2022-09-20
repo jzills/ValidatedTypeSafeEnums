@@ -1,6 +1,6 @@
-using ValidatedTypeSafeEnums.TypeSafeEnums;
+using Source.TypeSafeEnums;
 
-namespace ValidatedTypeSafeEnums.Data;
+namespace Source.Data;
 
 public sealed class OrderPaymentCycleEnum : TypeSafeEnum<OrderPaymentCycleEnum>
 {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using ValidatedTypeSafeEnums.TypeSafeEnums;
+using Source.TypeSafeEnums;
 
-namespace ValidatedTypeSafeEnums.Extensions;
+namespace Source.Extensions;
 
 public static class TypeExtensions
 {

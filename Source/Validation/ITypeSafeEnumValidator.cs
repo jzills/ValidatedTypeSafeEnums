@@ -1,4 +1,4 @@
-namespace ValidatedTypeSafeEnums.Validation;
+namespace Source.Validation;
 
 public interface ITypeSafeEnumValidator<T>
 {

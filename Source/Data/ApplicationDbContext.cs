@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace ValidatedTypeSafeEnums.Data;
+namespace Source.Data;
 
 #pragma warning disable CS8618
 
